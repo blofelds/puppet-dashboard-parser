@@ -17,3 +17,5 @@ alert when total pending nodes changes
 get last report
 
 make list pretty by removing domain names
+
+display prd nodes in red
