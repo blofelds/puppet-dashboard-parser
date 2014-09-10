@@ -1,0 +1,19 @@
+node list should be copy/pasteable
+display pending nodes list
+
+accept for input
+
+display pending nodes list from stg1/2/prd
+display pending nodes of type wap etc
+
+display input options
+
+display number of total nodes
+alert when total nodes changes
+
+display total pending nodes
+alert when total pending nodes changes
+
+get last report
+
+make list pretty by removing domain names
