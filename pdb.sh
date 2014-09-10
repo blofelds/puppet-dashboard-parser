@@ -8,6 +8,8 @@
 STG_PDB=$(<~/.pdbstg)
 PRD_PDB=$(<~/.pdbprd)
 
+printf "\n Display pending nodes in Stg1, Stg2 or Prd\n"
+printf "\n Enter  1  2 or p:  "
 read FILTER
 
 if [ $FILTER = "p" ] ; then
