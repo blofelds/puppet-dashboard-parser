@@ -20,17 +20,17 @@ printf  " Total Prd nodes: "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<'
 
 printf "\n Display pending nodes in Stg1, Stg2 or Prd\n"
-printf "\n Enter  1  2 or p:  "
-read FILTER
+read -p $' Enter  1  2 or p: ' FILTER
+printf "\n =================\n\n"
 
-if [ $FILTER = "p" ] ; then
-curl -s $PRD_PDB/nodes/pending?per_page=all |cut -f2 -d'>' |cut -f1 -d'<' |\grep $DOMAIN |sort |grep prd
-
-elif [ $FILTER = "1" ] ; then
-curl -s $STG_PDB/nodes/pending?per_page=all |cut -f2 -d'>' |cut -f1 -d'<' |\grep $DOMAIN |sort |grep stg1
+if [ $FILTER = "1" ] ; then
+cut -f2 -d'>' < $TMP1 |cut -f1 -d'<' |\grep $DOMAIN |sort |grep stg1
 
 elif [ $FILTER = "2" ] ; then
-curl -s $STG_PDB/nodes/pending?per_page=all |cut -f2 -d'>' |cut -f1 -d'<' |\grep $DOMAIN |sort |grep stg2
+cut -f2 -d'>' < $TMP1 |cut -f1 -d'<' |\grep $DOMAIN |sort |grep stg2
+
+elif [ $FILTER = "p" ] ; then
+cut -f2 -d'>' < $TMP2 |cut -f1 -d'<' |\grep $DOMAIN |sort |grep prd
 
 else
 echo "Invalid input"
