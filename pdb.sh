@@ -14,6 +14,10 @@ curl -s $STG_PDB/nodes/pending?per_page=all >  $TMP1
 curl -s $PRD_PDB/nodes/pending?per_page=all >  $TMP2
 }
 curl_nodes
+printf  "\n Total Stg nodes: "
+awk 'c&&!--c;/class=.all/{c=2}' $TMP1 |cut -f2 -d'>' |cut -f1 -d'<'
+printf  " Total Prd nodes: "
+awk 'c&&!--c;/class=.all/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<'
 
 printf "\n Display pending nodes in Stg1, Stg2 or Prd\n"
 printf "\n Enter  1  2 or p:  "
