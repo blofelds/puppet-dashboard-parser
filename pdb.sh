@@ -7,6 +7,13 @@
 
 STG_PDB=$(<~/.pdbstg)
 PRD_PDB=$(<~/.pdbprd)
+TMP1=/var/tmp/$(basename $0).tmp1
+TMP2=/var/tmp/$(basename $0).tmp2
+function curl_nodes {
+curl -s $STG_PDB/nodes/pending?per_page=all >  $TMP1
+curl -s $PRD_PDB/nodes/pending?per_page=all >  $TMP2
+}
+curl_nodes
 
 printf "\n Display pending nodes in Stg1, Stg2 or Prd\n"
 printf "\n Enter  1  2 or p:  "
