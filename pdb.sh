@@ -23,6 +23,14 @@ function red_output {
 printf " $(tput setaf 1)$1$(tput sgr0)\n"
 }
 
+function get_stg {
+grep stg$1 < $TMP1 |grep $DOMAIN |cut_n_sort
+}
+
+function get_prd {
+grep prd < $TMP2 |grep $DOMAIN |cut_n_sort
+}
+
 curl_nodes
 
 printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut_n_sort)"
@@ -38,13 +46,13 @@ read -p $' Enter  1  2 or p: ' FILTER
 printf "\n =================\n\n"
 
 if [ $FILTER = "1" ] ; then
-grep stg1 < $TMP1 |grep $DOMAIN |cut_n_sort
+get_stg 1
 
 elif [ $FILTER = "2" ] ; then
-grep stg2 < $TMP1 |grep $DOMAIN |cut_n_sort
+get_stg 2
 
 elif [ $FILTER = "p" ] ; then
-red_output $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
+red_output $(get_prd)
 
 else
 echo "Invalid input"
