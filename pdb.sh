@@ -17,9 +17,12 @@ curl -s $PRD_PDB/nodes/pending?per_page=all >  $TMP2
 
 curl_nodes
 
-printf  "\n Total Stg nodes: "
+printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut -f2 -d'>' |cut -f1 -d'<')"
+printf " / "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP1 |cut -f2 -d'>' |cut -f1 -d'<'
-printf  " Total Prd nodes: "
+
+printf  " Pending Prd nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<')"
+printf " / "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<'
 
 printf "\n Display pending nodes in Stg1, Stg2 or Prd?\n"
