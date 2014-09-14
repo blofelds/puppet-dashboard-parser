@@ -19,6 +19,10 @@ function cut_n_sort {
 cut -f2 -d'>' |cut -f1 -d'<' |sort
 }
 
+function red_output {
+printf " $(tput setaf 1)$1$(tput sgr0)\n"
+}
+
 curl_nodes
 
 printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut_n_sort)"
@@ -40,7 +44,7 @@ elif [ $FILTER = "2" ] ; then
 grep stg2 < $TMP1 |grep $DOMAIN |cut_n_sort
 
 elif [ $FILTER = "p" ] ; then
-grep prd < $TMP2 |grep $DOMAIN |cut_n_sort
+red_output $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
 
 else
 echo "Invalid input"
