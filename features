@@ -11,7 +11,7 @@
   display number of total nodes
 **alert when total nodes changes
 
-**display total pending nodes
+  display total pending nodes
 **alert when total pending nodes changes
 
 **get last report

@@ -15,13 +15,17 @@ curl -s $STG_PDB/nodes/pending?per_page=all >  $TMP1
 curl -s $PRD_PDB/nodes/pending?per_page=all >  $TMP2
 }
 
+function cut_n_sort {
+cut -f2 -d'>' |cut -f1 -d'<' |sort
+}
+
 curl_nodes
 
-printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut -f2 -d'>' |cut -f1 -d'<')"
+printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut_n_sort)"
 printf " / "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP1 |cut -f2 -d'>' |cut -f1 -d'<'
 
-printf  " Pending Prd nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<')"
+printf  " Pending Prd nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP2 |cut_n_sort)"
 printf " / "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<'
 
@@ -30,13 +34,13 @@ read -p $' Enter  1  2 or p: ' FILTER
 printf "\n =================\n\n"
 
 if [ $FILTER = "1" ] ; then
-cut -f2 -d'>' < $TMP1 |cut -f1 -d'<' |\grep $DOMAIN |sort |grep stg1
+grep stg1 < $TMP1 |grep $DOMAIN |cut_n_sort
 
 elif [ $FILTER = "2" ] ; then
-cut -f2 -d'>' < $TMP1 |cut -f1 -d'<' |\grep $DOMAIN |sort |grep stg2
+grep stg2 < $TMP1 |grep $DOMAIN |cut_n_sort
 
 elif [ $FILTER = "p" ] ; then
-cut -f2 -d'>' < $TMP2 |cut -f1 -d'<' |\grep $DOMAIN |sort |grep prd
+grep prd < $TMP2 |grep $DOMAIN |cut_n_sort
 
 else
 echo "Invalid input"
