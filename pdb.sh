@@ -31,6 +31,22 @@ function get_prd {
 grep prd < $TMP2 |grep $DOMAIN |cut_n_sort
 }
 
+function reports_stg {
+for node in $(get_stg 1) $(get_stg 2)
+do  URL=$(awk -v n=$node  'c&&!--c ; $0 ~n {c=3}' $TMP1 |cut -f2 -d'"')
+printf "\n  $node\n"
+curl -s  $STG_PDB$URL | awk '/Pending \(/{bob=1;next}/<h3>/{bob=0}bob' |grep href |cut_n_sort
+done
+}
+
+function reports_prd {
+for node in $(get_prd)
+do  URL=$(awk -v n=$node  'c&&!--c ; $0 ~n {c=3}' $TMP2 |cut -f2 -d'"')
+printf "\n  $node\n"
+curl -s  $PRD_PDB$URL | awk '/Pending \(/{bob=1;next}/<h3>/{bob=0}bob' |grep href |cut_n_sort
+done
+}
+
 curl_nodes
 
 printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut_n_sort)"
@@ -53,6 +69,12 @@ get_stg 2
 
 elif [ $FILTER = "p" ] ; then
 red_output $(get_prd)
+
+elif [ $FILTER = "rs" ] ; then
+reports_stg
+
+elif [ $FILTER = "rp" ] ; then
+reports_prd
 
 else
 echo "Invalid input"

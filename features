@@ -14,7 +14,7 @@
   display total pending nodes
 **alert when total pending nodes changes
 
-**get last report
+  get last report
 
 **make list pretty by removing domain names
 
