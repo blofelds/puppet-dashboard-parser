@@ -19,3 +19,14 @@
 **make list pretty by removing domain names
 
   display prd nodes in red
+
+**refresh button
+**display file age
+
+**loop instead of exiting
+
+**fix report output formatting to indent results
+
+**cleanup tmp files
+
+**display number of changes per node
