@@ -26,14 +26,14 @@ printf " $(tput setaf 1)$1$(tput sgr0)\n"
 
 # for each node in the queried env, grep for the nodename, print the nodename only,
 # and the following 9 lines, then delete the intermediate lines with sed.
-function get_stg {
+function grep_for_stg {
 for node in $(grep stg$1 < $TMP1 |grep $DOMAIN |cut_n_sort)
 do
 printf "%-37s %s \n" $(grep -oA 9 $node  $TMP1 |sed -e 2,9d)
 done
 }
 
-function get_prd {
+function grep_for_prd {
 for node in $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
 do
 printf "%-37s %s \n" $(grep -oA 9 $node  $TMP1 |sed -e 2,9d)
@@ -49,7 +49,7 @@ done
 }
 
 function curl_reports_prd {
-for node in $(get_prd)
+for node in $(grep_for_prd)
 do  URL=$(awk -v n=$node  'c&&!--c ; $0 ~n {c=3}' $TMP2 |cut -f2 -d'"')
 printf "\n  $node\n"
 curl -s  $PRD_PDB$URL | awk '/Pending \(/{bob=1;next}/<h3>/{bob=0}bob' |grep href |cut_n_sort
@@ -58,6 +58,7 @@ done
 
 curl_nodes
 
+# print header containing pending vs total nodes in stg & prd
 printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut_n_sort)"
 printf " / "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP1 |cut -f2 -d'>' |cut -f1 -d'<'
@@ -66,18 +67,19 @@ printf  " Pending Prd nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP2 |cut_n_
 printf " / "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<'
 
+# print prompt and read input
 printf "\n Display pending nodes in Stg1, Stg2 or Prd?\n"
 read -p $' Enter  1  2 or p: ' FILTER
 printf "\n =================\n\n"
 
 if [ $FILTER = "1" ] ; then
-get_stg 1
+grep_for_stg 1
 
 elif [ $FILTER = "2" ] ; then
-get_stg 2
+grep_for_stg 2
 
 elif [ $FILTER = "p" ] ; then
-red_output $(get_prd)
+red_output $(grep_for_prd)
 
 elif [ $FILTER = "rs1" ] ; then
 curl_reports_stg 1
