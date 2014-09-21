@@ -23,12 +23,20 @@ function red_output {
 printf " $(tput setaf 1)$1$(tput sgr0)\n"
 }
 
+# for each node in the queried env, grep for the nodename, print the nodename only,
+# and the following 9 lines, then delete the intermediate lines with sed.
 function get_stg {
-grep stg$1 < $TMP1 |grep $DOMAIN |cut_n_sort
+for node in $(grep stg$1 < $TMP1 |grep $DOMAIN |cut_n_sort)
+do
+printf "%-37s %s \n" $(grep -oA 9 $node  $TMP1 |sed -e 2,9d)
+done
 }
 
 function get_prd {
-grep prd < $TMP2 |grep $DOMAIN |cut_n_sort
+for node in $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
+do
+printf "%-37s %s \n" $(grep -oA 9 $node  $TMP1 |sed -e 2,9d)
+done
 }
 
 function curl_reports_stg {
