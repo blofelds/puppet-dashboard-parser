@@ -5,6 +5,7 @@
 # Script to assist querying and displaying pending nodes from puppet dashboard in a format
 # friendly for use with Mcollective.
 
+DOMAIN=$(<~/.domain)
 STG_PDB=$(<~/.pdbstg)
 PRD_PDB=$(<~/.pdbprd)
 TMP1=/var/tmp/$(basename $0).tmp1
