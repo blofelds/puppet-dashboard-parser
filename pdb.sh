@@ -70,7 +70,9 @@ awk 'c&&!--c;/class=.all/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<'
 # print prompt and read input
 printf "\n Display pending nodes in Stg1, Stg2 or Prd?\n"
 printf " Or report pending changes in Stg1, Stg2 or Prd?\n"
-read -p $'\n Enter      1   2 or  p\n Or enter rs1 rs2 or rp:' FILTER
+printf "\n Enter $(tput setaf 4)$(tput bold)     1   2 $(tput sgr0)or $(tput setaf 4)$(tput bold) p$(tput sgr0)\n"
+printf " Or enter $(tput setaf 4)$(tput bold)rs1 rs2$(tput sgr0) or $(tput setaf 4)$(tput bold)rp$(tput sgr0): "
+read FILTER
 printf "\n =================\n\n"
 
 if [ $FILTER = "1" ] ; then

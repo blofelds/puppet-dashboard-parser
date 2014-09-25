@@ -19,6 +19,7 @@
 **make list pretty by removing domain names
 
   display prd nodes in red
+  display input options in purple
 
 **refresh button
 **display file age
@@ -29,4 +30,4 @@
 
 **cleanup tmp files
 
-**display number of changes per node
+  display number of changes per node
