@@ -36,7 +36,7 @@ done
 function grep_for_prd {
 for node in $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
 do
-printf "%-37s %s \n" $(grep -oA 9 $node  $TMP1 |sed -e 2,9d)
+printf "%-37s %s \n" $(grep -oA 9 $node  $TMP2 |sed -e 2,9d)
 done
 }
 
