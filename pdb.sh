@@ -49,14 +49,14 @@ done
 }
 
 function curl_reports_prd {
-for node in $(grep_for_prd)
+for node in $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
 do  URL=$(awk -v n=$node  'c&&!--c ; $0 ~n {c=3}' $TMP2 |cut -f2 -d'"')
 printf "\n  $node\n"
 curl -s  $PRD_PDB$URL | awk '/Pending \(/{bob=1;next}/<h3>/{bob=0}bob' |grep href |cut_n_sort
 done
 }
 
-curl_nodes
+#curl_nodes
 
 # print header containing pending vs total nodes in stg & prd
 printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut_n_sort)"
@@ -82,7 +82,9 @@ elif [ $FILTER = "2" ] ; then
 grep_for_stg 2
 
 elif [ $FILTER = "p" ] ; then
-red_output $(grep_for_prd)
+for h in $(grep_for_prd); do red_output $h ; done
+#red_output $(grep_for_prd)
+#grep_for_prd
 
 elif [ $FILTER = "rs1" ] ; then
 curl_reports_stg 1
