@@ -5,6 +5,14 @@
 # Script to assist querying and displaying pending nodes from puppet dashboard in a format
 # friendly for use with Mcollective.
 
+if [ ! -f ~/.domain ] || [ ! -f ~/.pdbstg ] || [ ! -f ~/.pdbprd ] ; then
+  printf "\n$(tput setaf 1)Error:$(tput sgr0) Config file not found. Ensure the following files exist;\n\n"
+  printf "~/.domain   # Domain name of your managed servers\n"
+  printf "~/.pdbstg   # Puppet Dashboard address, including port number\n"
+  printf "~/.pdbprd   # Puppet Dashboard address, including port number\n\n"
+exit
+fi
+
 DOMAIN=$(<~/.domain)
 STG_PDB=$(<~/.pdbstg)
 PRD_PDB=$(<~/.pdbprd)
