@@ -125,3 +125,5 @@ do
   fi
 
 done
+
+rm $TMP1 $TMP2

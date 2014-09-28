@@ -28,7 +28,7 @@
 
 **fix report output formatting to indent results
 
-**cleanup tmp files
+  cleanup tmp files
 
   display number of changes per node
 
