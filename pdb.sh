@@ -20,10 +20,6 @@ function cut_n_sort {
 cut -f2 -d'>' |cut -f1 -d'<' |sort
 }
 
-function red_output {
-printf " $(tput setaf 1)$1$(tput sgr0)\n"
-}
-
 # for each node in the queried env, grep for the nodename, print the nodename only,
 # and the following 9 lines, then delete the intermediate lines with sed.
 function grep_for_stg {
@@ -33,6 +29,9 @@ printf "%-37s %s \n" $(grep -oA 9 $node  $TMP1 |sed -e 2,9d)
 done
 }
 
+# for each node in the prd env, grep for the nodename, print the nodename only,
+# and the following 9 lines, then delete the intermediate lines with sed. printf formats
+# red output and pads the fist string to 37 characters.
 function grep_for_prd {
 for node in $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
 do
@@ -40,6 +39,7 @@ printf "$(tput setaf 1)%-37s %s $(tput sgr0)\n" $(grep -oA 9 $node  $TMP2 |sed -
 done
 }
 
+# for each node, find the most recent report url, curl it, then lift the pending items
 function curl_reports_stg {
 for node in $(grep stg$1 < $TMP1 |grep $DOMAIN |cut_n_sort)
 do  URL=$(awk -v n=$node  'c&&!--c ; $0 ~n {c=3}' $TMP1 |cut -f2 -d'"')
@@ -48,6 +48,7 @@ curl -s  $STG_PDB$URL | awk '/Pending \(/{bob=1;next}/<h3>/{bob=0}bob' |grep hre
 done
 }
 
+# for each node, find the most recent report url, curl it, then lift the pending items
 function curl_reports_prd {
 for node in $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
 do  URL=$(awk -v n=$node  'c&&!--c ; $0 ~n {c=3}' $TMP2 |cut -f2 -d'"')
@@ -106,7 +107,6 @@ do
   curl_reports_stg 1
   printf "\n =================\n"
   print_prompt
- 
 
   elif [ $FILTER = "rs2" ] ; then
   curl_reports_stg 2
