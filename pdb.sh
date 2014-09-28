@@ -56,6 +56,15 @@ curl -s  $PRD_PDB$URL | awk '/Pending \(/{bob=1;next}/<h3>/{bob=0}bob' |grep hre
 done
 }
 
+function print_prompt {
+printf "\n Display pending nodes in Stg1, Stg2 or Prd?\n"
+printf " Or report pending changes in Stg1, Stg2 or Prd?\n"
+printf "\n Enter $(tput setaf 4)$(tput bold)     1   2 $(tput sgr0)or $(tput setaf 4)$(tput bold) p$(tput sgr0)\n"
+printf " Or enter $(tput setaf 4)$(tput bold)rs1 rs2$(tput sgr0) or $(tput setaf 4)$(tput bold)rp$(tput sgr0): "
+read FILTER
+printf "\n =================\n\n"
+}
+
 curl_nodes
 
 # print header containing pending vs total nodes in stg & prd
@@ -75,25 +84,44 @@ printf " Or enter $(tput setaf 4)$(tput bold)rs1 rs2$(tput sgr0) or $(tput setaf
 read FILTER
 printf "\n =================\n\n"
 
-if [ $FILTER = "1" ] ; then
-grep_for_stg 1
+until [ $FILTER = "q" ]
+do
 
-elif [ $FILTER = "2" ] ; then
-grep_for_stg 2
+  if [ $FILTER = "1" ] ; then
+  grep_for_stg 1
+  printf "\n =================\n"
+  print_prompt
 
-elif [ $FILTER = "p" ] ; then
-red_output $(grep_for_prd)
+  elif [ $FILTER = "2" ] ; then
+  grep_for_stg 2
+  printf "\n =================\n"
+  print_prompt
 
-elif [ $FILTER = "rs1" ] ; then
-curl_reports_stg 1
+  elif [ $FILTER = "p" ] ; then
+  red_output $(grep_for_prd)
+  printf "\n =================\n"
+  print_prompt
 
-elif [ $FILTER = "rs2" ] ; then
-curl_reports_stg 2
 
-elif [ $FILTER = "rp" ] ; then
-curl_reports_prd
+  elif [ $FILTER = "rs1" ] ; then
+  curl_reports_stg 1
+  printf "\n =================\n"
+  print_prompt
+ 
 
-else
-echo "Invalid input"
-exit
-fi
+  elif [ $FILTER = "rs2" ] ; then
+  curl_reports_stg 2
+  printf "\n =================\n"
+  print_prompt
+
+  elif [ $FILTER = "rp" ] ; then
+  curl_reports_prd
+  printf "\n =================\n"
+  print_prompt
+
+  else
+  echo "Invalid input"
+  print_prompt
+  fi
+
+done
