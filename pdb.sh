@@ -10,6 +10,7 @@ STG_PDB=$(<~/.pdbstg)
 PRD_PDB=$(<~/.pdbprd)
 TMP1=/var/tmp/$(basename $0).tmp1
 TMP2=/var/tmp/$(basename $0).tmp2
+FILTER=$1
 
 function curl_nodes {
 curl -s $STG_PDB/nodes/pending?per_page=all >  $TMP1
@@ -77,12 +78,14 @@ printf  " Pending Prd nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP2 |cut_n_
 printf " / "
 awk 'c&&!--c;/class=.all/{c=2}' $TMP2 |cut -f2 -d'>' |cut -f1 -d'<'
 
-# print prompt and read input
-printf "\n Display pending nodes in Stg1, Stg2 or Prd?\n"
-printf " Or report pending changes in Stg1, Stg2 or Prd?\n"
-printf "\n Enter $(tput setaf 4)$(tput bold)     1   2 $(tput sgr0)or $(tput setaf 4)$(tput bold) p$(tput sgr0)\n"
-printf " Or enter $(tput setaf 4)$(tput bold)rs1 rs2$(tput sgr0) or $(tput setaf 4)$(tput bold)rp$(tput sgr0): "
-read FILTER
+# if filter was not supplied as a command line argument, print prompt and read input
+if [ ! $FILTER ] ; then
+  printf "\n Display pending nodes in Stg1, Stg2 or Prd?\n"
+  printf " Or report pending changes in Stg1, Stg2 or Prd?\n"
+  printf "\n Enter $(tput setaf 4)$(tput bold)     1   2 $(tput sgr0)or $(tput setaf 4)$(tput bold) p$(tput sgr0)\n"
+  printf " Or enter $(tput setaf 4)$(tput bold)rs1 rs2$(tput sgr0) or $(tput setaf 4)$(tput bold)rp$(tput sgr0): "
+  read FILTER
+fi
 printf "\n =================\n\n"
 
 until [ $FILTER = "q" ]
