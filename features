@@ -27,7 +27,7 @@
 
   loop instead of exiting
 
-**fix report output formatting to indent results
+  fix report output formatting to indent results
 
   cleanup tmp files
 
