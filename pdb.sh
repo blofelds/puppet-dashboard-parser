@@ -36,7 +36,7 @@ done
 function grep_for_prd {
 for node in $(grep prd < $TMP2 |grep $DOMAIN |cut_n_sort)
 do
-printf "%-37s %s \n" $(grep -oA 9 $node  $TMP2 |sed -e 2,9d)
+printf "$(tput setaf 1)%-37s %s $(tput sgr0)\n" $(grep -oA 9 $node  $TMP2 |sed -e 2,9d)
 done
 }
 
@@ -65,7 +65,7 @@ read FILTER
 printf "\n =================\n\n"
 }
 
-#curl_nodes
+curl_nodes
 
 # print header containing pending vs total nodes in stg & prd
 printf  "\n Pending Stg nodes: $(awk 'c&&!--c;/pending active/{c=2}' $TMP1 |cut_n_sort)"
@@ -98,8 +98,7 @@ do
   print_prompt
 
   elif [ $FILTER = "p" ] ; then
-  #red_output $(grep_for_prd)
-  for h in $(grep_for_prd); do red_output $h ; done
+  grep_for_prd
   printf "\n =================\n"
   print_prompt
 
